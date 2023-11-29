@@ -41,7 +41,7 @@ public class Grafo<TIPO> {
      public boolean temCiclo() {
         List<Vertice<TIPO>> pilhaRecursao = new ArrayList<>();
 
-        for (Vertice<TIPO> vertice : vertices) {
+        for (Vertice<TIPO> vertice : this.vertices) {
             if (temCicloRecursivo(vertice, new ArrayList<>(), pilhaRecursao)) { 
                 return true;
             }
@@ -79,3 +79,5 @@ public class Grafo<TIPO> {
         return false;
     }
 }
+
+

@@ -11,18 +11,18 @@ public class Aula25_grafos {
         grafo.adicionarVertice("Lorenzo");
         grafo.adicionarVertice("Creuza");
         grafo.adicionarVertice("Créber");
-        grafo.adicionarVertice("Cráudio");
         
         grafo.adicionarAresta(2.0, "João", "Lorenzo");
         grafo.adicionarAresta(3.0, "Lorenzo", "Créber");
         grafo.adicionarAresta(1.0, "Créber", "Creuza");
-        grafo.adicionarAresta(1.0, "João", "Creuza");
-        grafo.adicionarAresta(3.0, "Cráudio", "João");
-        grafo.adicionarAresta(2.0, "Cráudio", "Lorenzo");
+        grafo.adicionarAresta(1.0, "Creuza", "João");
+
         
-        grafo.getVertice("João");
-        Vertice dado = grafo.getVertice("João");
-       ArrayList<Aresta> saida = dado.getArestasSaida();
+        //grafo.getVertice("João");
+        //Vertice dado = grafo.getVertice("João");
+       //ArrayList<Aresta> saida = dado.getArestasSaida();
+       
+        System.out.println(grafo.temCiclo());
        
        
     }
