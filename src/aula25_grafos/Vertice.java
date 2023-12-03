@@ -7,8 +7,8 @@ public class Vertice<TIPO> {
     private ArrayList<Aresta<TIPO>> arestasSaida;
     
     public Vertice(TIPO valor){
-        this.dado = valor;
-        this.arestasSaida = new ArrayList<Aresta<TIPO>>();
+        this.dado = valor; 
+        this.arestasSaida = new ArrayList<Aresta<TIPO>>(); //Salva as arestas que estão saindo de um determinado vértice para utilizarmos nas funções de Grafo
     }
 
     public TIPO getDado() {

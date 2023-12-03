@@ -1,9 +1,7 @@
 package aula25_grafos;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Grafo<TIPO> {
     private ArrayList<Vertice<TIPO>> vertices;
@@ -14,6 +12,8 @@ public class Grafo<TIPO> {
         this.arestas = new ArrayList<Aresta<TIPO>>();
     }
     
+
+    //Método para adicionar vértice ao grafo
     public void adicionarVertice(TIPO dado) {
         // Verifica se já existe um vértice com o mesmo dado
         if (getVertice(dado) == null) {
@@ -24,26 +24,25 @@ public class Grafo<TIPO> {
         }
     }
 
-    //public List<Vertice<TIPO>> imprimirVertices() {
-      //  for (Vertice<TIPO> vertice : vertices) {
-        //    System.out.println(vertice.getDado());
-        //}
-        // Retorna a lista de vértices
-        //return this.vertices;
-    //}
-    
-    public void adicionarAresta(Double peso, TIPO dadoInicio, TIPO dadoFim){
-        Vertice<TIPO> inicio = this.getVertice(dadoInicio);
-        Vertice<TIPO> fim = this.getVertice(dadoFim);
-        Aresta<TIPO> aresta = new Aresta<TIPO>(peso, inicio, fim);
-        inicio.adicionarArestaSaida(aresta);
-        this.arestas.add(aresta);
+
+    // Método para adicionar uma aresta ao grafo
+    public void adicionarAresta(TIPO dadoInicio, TIPO dadoFim){
+        Vertice<TIPO> inicio = this.getVertice(dadoInicio);  
+        Vertice<TIPO> fim = this.getVertice(dadoFim); 
+        Aresta<TIPO> aresta = new Aresta<TIPO>(inicio, fim);  // Cria uma nova aresta ligando o vértice de início ao vértice de fim
+        inicio.adicionarArestaSaida(aresta); // Adiciona a aresta à lista de arestas de saída do vértice de início
+        this.arestas.add(aresta); // Adiciona a aresta a nossa lista global de arestas do grafo
     }
     
+
+    // Método para buscar um vértice com base no dado associado
     public Vertice<TIPO> getVertice(TIPO dado){ //busca por vertice
         Vertice<TIPO> vertice = null;
+
+        // Itera sobre a lista de vértices para encontrar o vértice com o dado fornecido
         for(int i=0; i < this.vertices.size(); i++){
             if (this.vertices.get(i).getDado().equals(dado)){
+                // Atribui o vértice atual à variável 'vertice' e encerra o loop
                 vertice = this.vertices.get(i);
                 break;
             }
@@ -51,11 +50,13 @@ public class Grafo<TIPO> {
         return vertice;
     }
     
+
+    // Método para verificar se o grafo possui ciclos
      public boolean temCiclo() {
         List<Vertice<TIPO>> pilhaRecursao = new ArrayList<>();
 
         for (Vertice<TIPO> vertice : this.vertices) {
-            if (temCicloRecursivo(vertice, new ArrayList<>(), pilhaRecursao)) { 
+            if (temCicloRecursivo(vertice, new ArrayList<>(), pilhaRecursao)) { // Chama o método auxiliar para verificar ciclos a partir do vértice atual
                 return true;
             }
         }
@@ -63,6 +64,8 @@ public class Grafo<TIPO> {
         return false;
     }
 
+
+    // Método auxiliar recursivo para para verificar se o grafo possui ciclo
     private boolean temCicloRecursivo(Vertice<TIPO> vertice, List<Vertice<TIPO>> visitados, List<Vertice<TIPO>> pilhaRecursao) {
         if (pilhaRecursao.contains(vertice)) {
             // Se o vértice já está na pilha de recursão, então há um ciclo
@@ -93,13 +96,13 @@ public class Grafo<TIPO> {
         
     }
 
-
+    // Método para realizar a ordenação topológica do grafo
     public List<TIPO> ordenacaoTopologica() {
         List<Vertice<TIPO>> ordenacao = new ArrayList<>();
         List<Vertice<TIPO>> visitados = new ArrayList<>();
 
         for (Vertice<TIPO> vertice : this.vertices) {
-            if (!visitados.contains(vertice)) {
+            if (!visitados.contains(vertice)) { // Verifica se o vértice não foi visitado ainda
                 ordenacaoTopologicaRecursivo(vertice, visitados, ordenacao);
             }
         }
@@ -117,10 +120,13 @@ public class Grafo<TIPO> {
         return resultado;
     }
 
+
+    // Método auxiliar recursivo para realizar a ordenação topológica a partir de um vértice
     private void ordenacaoTopologicaRecursivo(Vertice<TIPO> vertice, List<Vertice<TIPO>> visitados, List<Vertice<TIPO>> ordenacao) {
         visitados.add(vertice);
 
         for (Aresta<TIPO> aresta : vertice.getArestasSaida()) {
+            // Obtém o vértice vizinho ao longo da aresta
             Vertice<TIPO> vizinho = aresta.getFim();
             if (!visitados.contains(vizinho)) {
                 ordenacaoTopologicaRecursivo(vizinho, visitados, ordenacao);
@@ -131,7 +137,7 @@ public class Grafo<TIPO> {
         ordenacao.add(vertice);
     }
 
-    // método criado apenas para verificar se o grafo está sendo construído corretamente
+    // Método criado apenas para verificar se o grafo está sendo construído corretamente
     public void imprimirGrafo() {
         System.out.println("Vértices:");
         for (Vertice<TIPO> vertice : this.vertices) {
