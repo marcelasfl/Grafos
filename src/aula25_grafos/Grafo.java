@@ -14,10 +14,23 @@ public class Grafo<TIPO> {
         this.arestas = new ArrayList<Aresta<TIPO>>();
     }
     
-    public void adicionarVertice(TIPO dado){
-        Vertice<TIPO> novoVertice = new Vertice<TIPO>(dado);
-        this.vertices.add(novoVertice);
+    public void adicionarVertice(TIPO dado) {
+        // Verifica se já existe um vértice com o mesmo dado
+        if (getVertice(dado) == null) {
+            Vertice<TIPO> novoVertice = new Vertice<TIPO>(dado);
+            this.vertices.add(novoVertice);
+        } else {
+            System.out.println("Já existe um vértice com o dado " + dado);
+        }
     }
+
+    //public List<Vertice<TIPO>> imprimirVertices() {
+      //  for (Vertice<TIPO> vertice : vertices) {
+        //    System.out.println(vertice.getDado());
+        //}
+        // Retorna a lista de vértices
+        //return this.vertices;
+    //}
     
     public void adicionarAresta(Double peso, TIPO dadoInicio, TIPO dadoFim){
         Vertice<TIPO> inicio = this.getVertice(dadoInicio);
@@ -27,7 +40,7 @@ public class Grafo<TIPO> {
         this.arestas.add(aresta);
     }
     
-    public Vertice<TIPO> getVertice(TIPO dado){
+    public Vertice<TIPO> getVertice(TIPO dado){ //busca por vertice
         Vertice<TIPO> vertice = null;
         for(int i=0; i < this.vertices.size(); i++){
             if (this.vertices.get(i).getDado().equals(dado)){
@@ -41,7 +54,7 @@ public class Grafo<TIPO> {
      public boolean temCiclo() {
         List<Vertice<TIPO>> pilhaRecursao = new ArrayList<>();
 
-        for (Vertice<TIPO> vertice : vertices) {
+        for (Vertice<TIPO> vertice : this.vertices) {
             if (temCicloRecursivo(vertice, new ArrayList<>(), pilhaRecursao)) { 
                 return true;
             }
@@ -77,5 +90,61 @@ public class Grafo<TIPO> {
         pilhaRecursao.remove(vertice);
 
         return false;
+        
     }
+
+
+    public List<TIPO> ordenacaoTopologica() {
+        List<Vertice<TIPO>> ordenacao = new ArrayList<>();
+        List<Vertice<TIPO>> visitados = new ArrayList<>();
+
+        for (Vertice<TIPO> vertice : this.vertices) {
+            if (!visitados.contains(vertice)) {
+                ordenacaoTopologicaRecursivo(vertice, visitados, ordenacao);
+            }
+        }
+
+        // Criando uma lista para armazenar o resultado da ordenação topológica
+        List<TIPO> resultado = new ArrayList<>();
+
+        // Adicionando à lista
+        for (int i = ordenacao.size() - 1; i >= 0; i--) {
+            resultado.add(ordenacao.get(i).getDado());
+        } //Revertendo a lista de ordenação e colocando os vértices do final-começo para ordenar corretamente
+
+        
+
+        return resultado;
+    }
+
+    private void ordenacaoTopologicaRecursivo(Vertice<TIPO> vertice, List<Vertice<TIPO>> visitados, List<Vertice<TIPO>> ordenacao) {
+        visitados.add(vertice);
+
+        for (Aresta<TIPO> aresta : vertice.getArestasSaida()) {
+            Vertice<TIPO> vizinho = aresta.getFim();
+            if (!visitados.contains(vizinho)) {
+                ordenacaoTopologicaRecursivo(vizinho, visitados, ordenacao);
+            }
+        }
+
+        // Adiciona o vértice à lista
+        ordenacao.add(vertice);
+    }
+
+    // método criado apenas para verificar se o grafo está sendo construído corretamente
+    public void imprimirGrafo() {
+        System.out.println("Vértices:");
+        for (Vertice<TIPO> vertice : this.vertices) {
+            System.out.println(vertice.getDado());
+        }
+
+        System.out.println("Arestas:");
+        for (Aresta<TIPO> aresta : this.arestas) {
+            System.out.println(aresta.getInicio().getDado() + " -> " + aresta.getFim().getDado());
+        }
+    }
+
 }
+
+
+
